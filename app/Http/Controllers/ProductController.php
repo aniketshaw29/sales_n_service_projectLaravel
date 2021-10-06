@@ -48,9 +48,12 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function updateProduct(Request $request)
     {
-        
+        $product = Product::findOrFail( $request->input('id'));
+        $product->product_name=$request->input('productName');
+        $product->save();
+        return $product;
     }
 
     /**
@@ -59,9 +62,11 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function deleteProductById( $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->delete();
+        return "Deleted";
     }
 
     /**

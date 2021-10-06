@@ -22,4 +22,6 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('products',[ProductController::class, 'index']);
     Route::get('products/{id}',[ProductController::class, 'getProductById']);
     Route::post('products',[ProductController::class, 'saveProduct']);
+    Route::patch('products',[ProductController::class, 'updateProduct']);
+    Route::delete('products/{id}',[ProductController::class, 'deleteProductById']);
 } );
