@@ -35,7 +35,7 @@ class ProductController extends Controller
         );
         $validator = Validator::make($request->all(),$rules,$messages);
         if($validator->fails()){
-            return $validator->messages();
+            return $validator->$messages;
         }
         $product = new Product();
         $product->product_name = $request->productName;
@@ -52,6 +52,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail( $request->input('id'));
         $product->product_name=$request->input('productName');
+        $product->unit_id=$request->input('unitID');
         $product->save();
         return $product;
     }

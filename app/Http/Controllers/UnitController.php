@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Unit;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UnitController extends Controller
 {
@@ -14,7 +17,8 @@ class UnitController extends Controller
      */
     public function index()
     {
-        //
+        $units = Unit::get();
+        return $units;
     }
 
     /**
@@ -22,9 +26,10 @@ class UnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function getUnitById($id)
     {
-        //
+        $units = Unit::findOrFail($id);
+        return $units;
     }
 
     /**
@@ -33,9 +38,25 @@ class UnitController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function saveUnits(Request $request)
     {
-        //
+        $rules = array(
+            'unitName' => 'required|unique:units,unit_name|max:20',
+            'formalName' => 'required|unique:units,formal_name|max:20'
+        );
+        $messages = array(
+            'unitName.required' => 'Please enter the unit name',
+            'formalName.required' => 'Please enter the units formal name'
+        );
+        $validator = Validator::make($request->all(),$rules,$messages);
+        if($validator->fails()){
+            return $validator->$messages;
+        }
+        $unit = new Unit();
+        $unit->unit_name = $request->unitName;
+        $unit->formal_name = $request->formalName;
+        $unit->save();
+        return $unit;
     }
 
     /**
@@ -44,9 +65,13 @@ class UnitController extends Controller
      * @param  \App\Models\Unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function show(Unit $unit)
+    public function updateUnit(Request $request)
     {
-        //
+        $units = Unit::findOrFail( $request->input('id'));
+        $units->unit_name=$request->input('unitName');
+        $units->formal_name=$request->input('formalName');
+        $units->save();
+        return $units;
     }
 
     /**
@@ -55,9 +80,15 @@ class UnitController extends Controller
      * @param  \App\Models\Unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function edit(Unit $unit)
+    public function deleteUnitById($id)
     {
-        //
+        $temp = Product::whereUnitId($id)->count();
+        if($temp > 0){
+            return "The unit is in use, so you can't delete it";
+        }
+        $units = Unit::findOrFail($id);
+        $units->delete();
+        return "Deleted";
     }
 
     /**

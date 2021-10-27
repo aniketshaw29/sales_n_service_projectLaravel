@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\controllers\ProductController;
-
+use App\Http\controllers\UnitController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,4 +24,11 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::post('products',[ProductController::class, 'saveProduct']);
     Route::patch('products',[ProductController::class, 'updateProduct']);
     Route::delete('products/{id}',[ProductController::class, 'deleteProductById']);
+} );
+Route::group(array('prefix' => 'devunits'), function() {
+    Route::get('units',[UnitController::class, 'index']);
+    Route::get('units/{id}',[UnitController::class, 'getUnitById']);
+    Route::post('units',[UnitController::class, 'saveUnits']);
+    Route::patch('units',[UnitController::class, 'updateUnit']);
+    Route::delete('units/{id}',[UnitController::class, 'deleteUnitById']);
 } );
